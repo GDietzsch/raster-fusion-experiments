@@ -1,0 +1,37 @@
+# Experimento 03: HistGradientBoosting. Mesmos rasters, horizontes e divisões dos experimentos 01/02.
+# Busca de iterações e filtragem usam apenas subamostras fixas das etapas internas.
+data_root: ../data/conjuntos_enriquecidos/20260925T122022935585Z
+output_root: ../runs/enriched_hgb
+reference_target: treinamento/2020/targets/target.tif
+split:
+  method: spatial_block
+  train: 0.70
+  validation: 0.15
+  test: 0.15
+  block_size: 96
+  buffer_pixels: 3
+  seed: 42
+sampling:
+  per_stage_year: 100000
+  seed: 4201
+  window_size: 512
+evaluation:
+  target_resampling: nearest
+  high_target_positive_quantile: 0.99
+  primary_metric: rmse
+  tie_breakers: [mae, fewer_features]
+  final_h0_target_years: [2020, 2021, 2022]
+  final_h1_target_years: [2022]
+hgb:
+  loss: squared_error
+  learning_rate: 0.08
+  max_iter_candidates: [60, 120, 180]
+  max_leaf_nodes: 15
+  min_samples_leaf: 80
+  l2_regularization: 1.0
+  max_bins: 128
+  selection_samples_per_stage_year: 20000
+  early_stopping: false
+  random_state: 4203
+runtime:
+  cpu_threads: 4

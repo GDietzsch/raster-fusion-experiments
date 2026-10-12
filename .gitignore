@@ -28,7 +28,7 @@
 *.pickle
 *.joblib
 *.csv
-!provenance/*.csv
+!_support/provenance/*.csv
 *.zip
 *.log
 .env

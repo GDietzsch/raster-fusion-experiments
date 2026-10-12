@@ -1,0 +1,42 @@
+# Experimento 07: protocolo em protocols/EXPERIMENTO_07_MLP.md.
+data_root: ../data/conjuntos_enriquecidos/20260925T122022935585Z
+output_root: ../runs/enriched_mlp
+reference_target: treinamento/2020/targets/target.tif
+split:
+  method: spatial_block
+  train: 0.70
+  validation: 0.15
+  test: 0.15
+  block_size: 96
+  buffer_pixels: 3
+  seed: 42
+sampling:
+  per_stage_year: 100000
+  seed: 4201
+  window_size: 512
+evaluation:
+  target_resampling: nearest
+  high_target_positive_quantile: 0.99
+  primary_metric: rmse
+  tie_breakers: [mae, fewer_features]
+  final_h0_target_years: [2020, 2021, 2022]
+  final_h1_target_years: [2022]
+mlp:
+  loss: squared_error
+  activation: relu
+  solver: adam
+  early_stopping: false
+  random_state: 4209
+  selection_seed: 4203
+  selection_samples_per_stage_year: 20000
+  max_epochs: 500
+  patience: 15
+  min_epochs: 10
+  batch_size: 512
+  candidates:
+    - {hidden_layer_sizes: [32], alpha: 0.001, learning_rate_init: 0.001}
+    - {hidden_layer_sizes: [64], alpha: 0.001, learning_rate_init: 0.001}
+    - {hidden_layer_sizes: [64, 32], alpha: 0.001, learning_rate_init: 0.001}
+    - {hidden_layer_sizes: [64, 32], alpha: 0.01, learning_rate_init: 0.003}
+runtime:
+  cpu_threads: 4

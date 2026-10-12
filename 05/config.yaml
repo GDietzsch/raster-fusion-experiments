@@ -1,0 +1,46 @@
+# Experimento 05: protocolo detalhado em protocols/EXPERIMENTO_05_RANDOM_FOREST.md.
+data_root: ../data/conjuntos_enriquecidos/20260925T122022935585Z
+output_root: ../runs/enriched_random_forest
+reference_target: treinamento/2020/targets/target.tif
+split:
+  method: spatial_block
+  train: 0.70
+  validation: 0.15
+  test: 0.15
+  block_size: 96
+  buffer_pixels: 3
+  seed: 42
+sampling:
+  per_stage_year: 100000
+  seed: 4201
+  window_size: 512
+evaluation:
+  target_resampling: nearest
+  high_target_positive_quantile: 0.99
+  primary_metric: rmse
+  tie_breakers: [mae, fewer_features]
+  final_h0_target_years: [2020, 2021, 2022]
+  final_h1_target_years: [2022]
+random_forest:
+  criterion: squared_error
+  bootstrap: true
+  oob_score: false
+  random_state: 4205
+  candidate_seed: 4206
+  selection_samples_per_stage_year: 20000
+  n_candidates: 16
+  n_finalists: 3
+  screening_trees: 96
+  filtering_trees: 160
+  final_trees: 320
+  max_features: [0.50, 0.75, 1.00]
+  min_samples_leaf: [0.0005, 0.002, 0.01]
+  max_leaf_nodes: [256, 1024, 4096]
+  max_samples: [0.50, 0.75, 1.00]
+  reference_candidate:
+    max_features: 0.75
+    min_samples_leaf: 0.002
+    max_leaf_nodes: 1024
+    max_samples: 0.75
+runtime:
+  cpu_threads: 4

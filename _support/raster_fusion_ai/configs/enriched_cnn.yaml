@@ -1,0 +1,42 @@
+# Experimento 08: protocols/EXPERIMENTO_08_CNN.md
+data_root: ../../../data/conjuntos_enriquecidos/20260925T122022935585Z
+output_root: ../../../runs/enriched_cnn
+reference_target: treinamento/2020/targets/target.tif
+sample_source: ../../../runs/enriched_mlp/20260926T204853996228Z
+split:
+  method: spatial_block
+  train: 0.70
+  validation: 0.15
+  test: 0.15
+  block_size: 96
+  buffer_pixels: 3
+  seed: 42
+sampling:
+  per_stage_year: 100000
+  seed: 4201
+  window_size: 512
+evaluation:
+  target_resampling: nearest
+  high_target_positive_quantile: 0.99
+  primary_metric: rmse
+  tie_breakers: [mae, fewer_features]
+  final_h0_target_years: [2020, 2021, 2022]
+  final_h1_target_years: [2022]
+cnn:
+  patch_size: 5
+  wide_step_pixels: 82   # samples at 0, ±20.5 km and ±41 km on each axis
+  tile_size: 256
+  selection_seed: 4203
+  selection_samples_per_stage_year: 10000
+  max_epochs: 40
+  min_epochs: 5
+  patience: 8
+  batch_size: 512
+  random_state: 4210
+  device: auto
+  candidates:
+    - {filters: 16, learning_rate: 0.001, weight_decay: 0.01}
+    - {filters: 32, learning_rate: 0.001, weight_decay: 0.01}
+    - {filters: 32, learning_rate: 0.0003, weight_decay: 0.05}
+runtime:
+  cpu_threads: 4

@@ -1,0 +1,44 @@
+# Experiment 12. Shared dense engine with Inception blocks and eight input arms.
+model_family: inception
+data_root: ../data/conjuntos_enriquecidos/20260925T122022935585Z
+output_root: ../runs/enriched_inception
+reference_target: treinamento/2020/targets/target.tif
+sample_source: ../runs/enriched_mlp/20260926T204853996228Z
+input_cache_source: ../runs/enriched_cnn/20260926T223539611207Z
+split:
+  method: spatial_block
+  train: 0.70
+  validation: 0.15
+  test: 0.15
+  block_size: 96
+  buffer_pixels: 3
+  seed: 42
+sampling:
+  per_stage_year: 100000
+  seed: 4201
+  window_size: 512
+evaluation:
+  target_resampling: nearest
+  high_target_positive_quantile: 0.99
+  primary_metric: rmse
+  tie_breakers: [mae, fewer_features]
+  final_h0_target_years: [2020, 2021, 2022]
+  final_h1_target_years: [2022]
+unet:
+  extended_arms: true
+  core_size: 512
+  halo_pixels: 224
+  depth: 5
+  training_tiles_per_year: 64
+  selection_tiles_per_year: 32
+  max_epochs: 30
+  min_epochs: 5
+  patience: 6
+  random_state: 4210
+  device: cuda
+  candidates:
+    - {initial_filters: 8, learning_rate: 0.001, weight_decay: 0.01, block_type: inception}
+    - {initial_filters: 16, learning_rate: 0.001, weight_decay: 0.01, block_type: inception}
+runtime:
+  cpu_threads: 4
+  prevent_sleep: true

@@ -1,0 +1,12 @@
+# Frozen controls of experiment 10; no external-driven selection.
+base_config: enriched_unet.yaml
+source_run: ../../../runs/enriched_unet/20260927T185613221209Z
+output_root: ../../../runs/enriched_unet_controls
+seeds: [4210, 4211, 4212]
+tile_seed: 4210
+epochs: 11
+training_tiles_per_year: 64
+monitor_tiles_per_year: 32
+context_depth: 3
+require_cuda: true
+prevent_sleep: true

@@ -1,0 +1,45 @@
+# Experimento 04: XGBoost. Mesmos rasters, horizontes, divisões e amostras finais.
+# A grade e os grupos de atributos são escolhidos apenas nas etapas internas.
+data_root: ../data/conjuntos_enriquecidos/20260925T122022935585Z
+output_root: ../runs/enriched_xgboost
+reference_target: treinamento/2020/targets/target.tif
+split:
+  method: spatial_block
+  train: 0.70
+  validation: 0.15
+  test: 0.15
+  block_size: 96
+  buffer_pixels: 3
+  seed: 42
+sampling:
+  per_stage_year: 100000
+  seed: 4201
+  window_size: 512
+evaluation:
+  target_resampling: nearest
+  high_target_positive_quantile: 0.99
+  primary_metric: rmse
+  tie_breakers: [mae, fewer_features]
+  final_h0_target_years: [2020, 2021, 2022]
+  final_h1_target_years: [2022]
+xgboost:
+  objective: reg:squarederror
+  tree_method: hist
+  device: cpu
+  eval_metric: rmse
+  learning_rate: 0.08
+  n_estimators_candidates: [60, 120, 180]
+  max_depth: 4
+  min_child_weight: 80
+  reg_lambda: 1.0
+  reg_alpha: 0.0
+  gamma: 0.0
+  subsample: 1.0
+  colsample_bytree: 1.0
+  max_bin: 128
+  selection_samples_per_stage_year: 20000
+  selection_seed: 4203
+  random_state: 4204
+  early_stopping_rounds: null
+runtime:
+  cpu_threads: 4
