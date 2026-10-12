@@ -1,0 +1,4 @@
+experiment,family,run_id
+08A,cnn_local_control,20260927T010521698427Z
+09A,resnet_local_control,20260927T181122308509Z
+10ABC,unet_controls,20260928T005339448925Z
